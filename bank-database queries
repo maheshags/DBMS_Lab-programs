@@ -1,0 +1,43 @@
+use bank_429;
+ create table barrower_429(
+ coustomer_name varchar(20),
+ loan_no int,
+ foreign key(coustomer_name) references bank_customer_429(customer_name),
+  foreign key(loan_no) references loan_429(loan_no)
+ );
+
+insert barrower_429 values("avinash",1);
+insert barrower_429 values("dinesh",2);
+insert barrower_429 values("Ravi",3);
+insert barrower_429 values("nikhil",4);
+
+select distinct d.customer_name from depositer_429 d,
+bank_account_429 ba, branch_429 b where d.acc_no=ba.acc_no
+and ba.branch_name=b.branch_name and b.branch_city="Delhi" group by d.customer_name having count(b.branch_name)>1;
+
+delete from depositer_429 where acc_no=3;
+
+select b.coustomer_name
+from barrower_429 b
+where b.loan_no not in(select d.acc_no from depositer_429 d
+where b.loan_no=d.acc_no);
+
+select b.coustomer_name
+from barrower_429 b
+where b.loan_no in(select d.acc_no from depositer_429 d,bank_account_429 ba, branch_429 b
+where b.loan_no=d.acc_no and d.acc_no=ba.acc_no and
+ba.branch_name=b.branch_name
+and b.branch_city="Bangalore");
+
+update branch_429 set assets=200000 where branch_city='Bombay';
+
+select branch_name
+from branch_429
+where assets > all (select assets from branch_429
+where branch_city='Bangalore');
+
+delete from bank_account_429 ba where ba.branch_name=
+(select b.branch_name from branch_429 b where branch_city='Bombay');
+
+update bank_account_429 set balance=balance+((5*balance)/100) where acc_no in(1,2,4,5,8,9,10,11,12);
+select*from bank_account_429;
