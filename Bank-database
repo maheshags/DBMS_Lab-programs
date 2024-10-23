@@ -1,0 +1,86 @@
+create database bank_429;
+use bank_429;
+create table branch_429(
+branch_name varchar(25),
+branch_city varchar(15),
+assets real,
+primary key(branch_name));
+create table bank_account_429(
+acc_no int,
+balance int,
+branch_name varchar(25),
+primary key(acc_no),
+foreign key(branch_name) references branch_429(branch_name)
+);
+create table bank_customer_429(
+customer_name varchar(10),
+customer_street varchar(25),
+customer_city varchar(15),
+primary key(customer_name)
+);
+create table depositer_429(
+customer_name varchar(10),
+acc_no int,
+primary key(customer_name, acc_no),
+foreign key(customer_name) references bank_customer_429(customer_name),
+foreign key(acc_no) references bank_account_429(acc_no)
+);
+create table loan_429(
+loan_no int,
+branch_name varchar(25),
+amount int,
+primary key(loan_no),
+foreign key(branch_name) references branch_429(branch_name)
+);
+
+insert into branch_429 values('SBI_Chamrajpet','Bangalore',50000);
+insert into branch_429 values('SBI_Residency Road','Bangalore',10000);
+insert into branch_429 values('SBI_Shivaji Road','Bombay',20000);
+insert into branch_429 values('SBI_Parliament Road','Delhi',10000);
+insert into branch_429 values('SBI_Jantarmantar','Delhi',20000);
+select *from branch_429;
+
+insert into bank_account_429 values(1,2000,'SBI_Chamrajpet');
+insert into bank_account_429 values(2,5000,'SBI_Residency Road');
+insert into bank_account_429 values(3,6000,'SBI_Shivaji Road');
+insert into bank_account_429 values(4,9000,'SBI_Parliament Road');
+insert into bank_account_429 values(5,8000,'SBI_Jantarmantar');
+insert into bank_account_429 values(6,4000,'SBI_Shivaji Road');
+insert into bank_account_429 values(8,4000,'SBI_Residency Road');
+insert into bank_account_429 values(9,3000,'SBI_Parliament Road');
+insert into bank_account_429 values(10,5000,'SBI_Residency Road');
+insert into bank_account_429 values(11,2000,'SBI_Jantarmantar');
+select *from bank_account_429;
+
+insert into bank_customer_429 values('Avinash','Bull Temple Road','Bangalore');
+insert into bank_customer_429 values('Dinesh','Bannerghatta Road','Bangalore');
+insert into bank_customer_429 values('Mohan','National College Road','Bangalore');
+insert into bank_customer_429 values('Nikhil','Akbar Road','Delhi');
+insert into bank_customer_429 values('Ravi','Prithviraj Road','Delhi');
+select *from bank_customer_429;
+
+insert into depositer_429 values('Avinash',1);
+insert into depositer_429 values('Dinesh',2);
+insert into depositer_429 values('Mohan',3);
+insert into depositer_429 values('Nikhil',4);
+insert into depositer_429 values('Ravi',5);
+insert into depositer_429 values('Avinash',8);
+insert into depositer_429 values('Nikhil',9);
+insert into depositer_429 values('Dinesh',10);
+insert into depositer_429 values('Nikhil',11);
+select *from depositer_429;
+
+
+insert into loan_429 values(1,'SBI_Chamrajpet',1000);
+insert into loan_429 values(2,'SBI_Residency Road',2000);
+insert into loan_429 values(3,'SBI_Shivaji Road',3000);
+insert into loan_429 values(4,'SBI_Parliament Road',4000);
+insert into loan_429 values(5,'SBI_Jantarmantar',5000);
+     
+     
+     
+select *from branch_429;
+select *from bank_account_429;
+select *from bank_customer_429;
+select *from depositer_429;
+select*from loan_429;
