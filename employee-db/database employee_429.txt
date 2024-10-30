@@ -1,0 +1,81 @@
+create database employee_429;
+use employee_429;
+create table DEPT(
+	D_no int primary key,
+    D_name varchar(50),
+    D_loc varchar(50)
+    );
+create table employee(
+	Emp_no int primary key,
+    E_name varchar(50),
+    MGR_no int,
+	hire_date date,
+    sal int,
+    D_no int,
+    foreign key (D_no) references DEPT(D_no)
+    );
+create table project(
+	P_no int primary key,
+    P_name varchar(50),
+    P_loc varchar(50)
+    );
+    
+create table incentives(
+	inentive_id int primary key,
+    Emp_no int,
+    incentive_date date,
+    incentive_amount int,
+    foreign key(Emp_no) references employee(Emp_no)
+    );
+create table assigned_to(
+Emp_no int, 
+P_no int,
+job_role varchar(50),
+primary key(Emp_no,P_no),
+foreign key(Emp_no) references employee(Emp_no),
+foreign key(P_no) references project(P_no)
+);
+insert into DEPT value(1,"sales","banglore");
+insert into DEPT value(2,"emgineering","delhi");
+insert into DEPT value(3,"medical","hyderabad");
+insert into DEPT value(4,"buisness","banglore");
+insert into DEPT value(5,"hotelmanagement","newyork");
+
+insert into employee value(101,"shiva",1001,"2024-05-12",60000,1);
+insert into employee value(102,"shiva",1002,"2025-08-14",50000,2);
+insert into employee value(103,"shiva",1003,"2026-05-16",30000,3);
+insert into employee value(104,"shiva",1004,"2024-07-17",70000,4);
+insert into employee value(105,"shiva",1005,"2022-05-19",90000,5);
+
+insert into project values(201,"projectA","banglore");
+insert into project values(202,"projectB","newyork");
+insert into project values(203,"projectC","hyderabad");
+insert into project values(204,"projectD","delhi");
+insert into project values(205,"projectE","banglore");
+
+
+insert into incentives values(1,101,"2023-04-23",800);
+insert into incentives values(2,102,"2026-04-13",600);
+insert into incentives values(3,103,"2026-04-13",900);
+insert into incentives values(4,104,"2023-04-26",400);
+insert into incentives values(5,105,"2022-04-27",500);
+
+insert into assigned_to values(101,201,"developer");
+insert into assigned_to values(102,202,"analister");
+insert into assigned_to values(103,203,"tester");
+insert into assigned_to values(104,204,"coder");
+insert into assigned_to values(105,205,"designer");
+
+select *from DEPT;
+select *from employee;
+select *from project;
+select *from incentives;
+select *from assigned_to;
+
+
+select Emp_no  from assigned_to a ,project p where a.P_no=p.P_no and p.P_loc in ("banglore","hyderabad","mysore");
+
+update incentives set incentive_amount=null where Emp_no=102;
+
+select inentive_id from incentives where incentive_amount is null;
+  
