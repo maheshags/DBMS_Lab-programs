@@ -1,0 +1,84 @@
+create database supplier_429;
+use supplier_429;
+create table parts(
+ pid int primary key,
+ pname varchar(30),
+ color varchar(10)
+);
+create table supplier(
+ sid int primary key,
+ sname varchar(30),
+ city varchar(10)
+);
+create table catalog(
+ sid int,
+ pid int,
+ cost int,
+ foreign key(sid)references supplier(sid),
+ foreign key(pid)references parts(pid)
+);
+
+insert into parts values(20001,"book","red");
+insert into parts values(20002,"pen","red");
+insert into parts values(20003,"pencil","green");
+insert into parts values(20004,"mobile","green");
+insert into parts values(20005,"charger","black");
+
+insert into supplier values(10001,"acme widget","banglore");
+insert into supplier values(10002,"johns","kolkota");
+insert into supplier values(10003,"vimal","mumbai");
+insert into supplier values(10004,"reliance","delhi");
+
+insert into catalog values(10001,20001,10);
+insert into catalog values(10001,20002,10);
+insert into catalog values(10001,20003,30);
+insert into catalog values(10001,20003,10);
+insert into catalog values(10001,20005,10);
+insert into catalog values(10002,20001,10);
+insert into catalog values(10002,20002,20);
+insert into catalog values(10003,20003,30);
+insert into catalog values(10004,20003,40);
+insert into catalog values(10001,20004,10);
+select*from catalog;
+select*from supplier;
+select*from parts;
+
+select distinct p.pname from parts p join catalog c on p.pid=c.pid;
+
+select s.sname from supplier s 
+where not exists(select p.pid from parts p
+	where p.pid not in (select c.pid from catalog c
+	where c.sid=s.sid)
+);
+
+
+select s.sname from supplier s
+where not exists(
+	select p.pid from parts p
+    where p.color="red" and p.pid not in (
+			select c.pid from catalog c
+            where c.sid=s.sid)
+);
+
+select p.pname from parts p
+join catalog c on p.pid=c.pid
+join supplier s on s.sid=c.sid
+where s.sname="acme widget" and p.pid not in (
+	select c1.pid from catalog c1
+    join supplier s1 on s1.sid=c1.sid
+    where s1.sname != "acme widget"
+);
+
+select distinct c.sid from catalog c
+join(
+	select pid, avg(cost) as avgcost from catalog group by pid
+    )
+avgcost on c.pid=avgcost.pid
+where c.cost>avgcost.avgcost;
+
+select p.pname, s.sname from parts p 
+join catalog c on p.pid=c.pid
+join supplier s on s.sid=c.sid
+where c.cost=(select max(c1.cost) from catalog c1
+			 where c.pid=p.pid
+);
